@@ -1,16 +1,21 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import PropTypes from 'prop-types';
 import {products} from '../assets/assets'
 export const ProductContext = createContext();
 
 const ProductContextProvider = (props) => {
     const currency = '$';
-    const delivery_free = 10;  
-  
+
+    const [search , setSearch] = useState('');
+    const [showSearch , setShowSearch] = useState(false);
+     
     const value = {
       products,
       currency,
-      delivery_free,
+      search,
+      setSearch, 
+      showSearch,
+      setShowSearch,
     };
 
     return (
