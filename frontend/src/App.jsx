@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import SearchBar from "./components/SearchBar";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Routes>
       <Route path='/home' element={<Home/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/cart' element={<Cart/>}/>
       </Routes>
     </div>
   );
