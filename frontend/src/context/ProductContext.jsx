@@ -44,13 +44,24 @@ const ProductContextProvider = (props) => {
             console.error('Error calculating cart count:', error);
         }
     }
-
     return totalCount;
 };
 
+    const updateQuantity = async (itemId, quantity) => {
+      // Clone the cartItems to avoid mutating state directly
+      let cartData = structuredClone(cartItems);
+  
+      // Update the quantity for the given itemId
+      if (quantity > 0) {
+          cartData[itemId] = quantity; 
+      } else {
+          delete cartData[itemId]; 
+      }
+      setCartItems(cartData);
+  };
+  
 
 
-     
     const value = {
       products,
       currency,
@@ -61,6 +72,7 @@ const ProductContextProvider = (props) => {
       cartItems,
       addToCart,
       getCartCount,
+      updateQuantity,
     };
 
     return (

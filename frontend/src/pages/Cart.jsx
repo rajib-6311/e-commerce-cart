@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
+import { assets } from "../assets/assets";
 
 const Cart = () => {
-    const { products, currency, cartItems } = useContext(ProductContext);
+    const { products, currency, cartItems, updateQuantity } = useContext(ProductContext);
     const [cartData, setCartData] = useState([]);
 
     useEffect(() => {
@@ -33,25 +34,28 @@ const Cart = () => {
                 {cartData.map((item, index) => (
                     <div
                         key={index}
-                        className="py-4 border-t border-b text-gray-700 grid grid-cols-1"
+                        className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
                     >
                         <div className="flex items-start gap-6">
-                            <img className="w-16" src={item.image} alt={item.name} />
+                            <img className="w-16 sm:w-20" src={item.image} alt={item.name} />
                             <div>
-                                <h1>{item.name}</h1>
-                                <p>
-                                    Quantity: {item.quantity} | Price: {currency}
-                                    {item.price}
-                                </p>
-                                <p>
-                                    Subtotal: {currency}
-                                    {(item.price * item.quantity).toFixed(2)}
-                                </p>
+                                <h1 className="text-xs font-medium">{item.name}</h1>
+                                <div className="flex items-center gap-5 mt-2">
+                                    <p>{currency}{item.price}</p>
+                                </div>
                             </div>
                         </div>
+                        <input onChange={(e)=>e.target.value === '' || e.target.value === '0' ? null: updateQuantity(item._id, Number(e.target.value))} className="border max-w-10 sm:max-w-20 px-1 py-1" type="number" min={1} defaultValue={item.quantity} />
+                        <img
+                            onClick={() => updateQuantity(item._id, 0)} // Set quantity to 0 to remove item
+                            className="w-4 sm:w-5 cursor-pointer"
+                            src={assets.bin_icon}
+                            alt="Delete"
+                        />
                     </div>
                 ))}
             </div>
+
         </div>
     );
 };
