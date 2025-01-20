@@ -1,6 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext,useState } from "react";
 import PropTypes from 'prop-types';
 import {products} from '../assets/assets'
+
+
 export const ProductContext = createContext();
 
 const ProductContextProvider = (props) => {
@@ -8,6 +10,46 @@ const ProductContextProvider = (props) => {
 
     const [search , setSearch] = useState('');
     const [showSearch , setShowSearch] = useState(false);
+    const [cartItems, setCartItems] = useState({});
+
+    // add cart item function 
+    const addToCart = async(itemId)=>{
+      let cartData = structuredClone(cartItems);
+
+      if(cartData[itemId]){
+        if(cartData[itemId]){
+          cartData[itemId] += 1;
+        }
+        else{
+          cartData[itemId] = 1;
+        }
+      }
+      else{
+        cartData[itemId] = {};
+        cartData[itemId] = 1;
+      }
+      setCartItems(cartData)
+    }
+
+  // show the cart data count 
+  const getCartCount = () => {
+    let totalCount = 0;
+
+    for (const itemId in cartItems) {
+        try {
+            if (cartItems[itemId] > 0) {
+                totalCount += cartItems[itemId];
+            }
+        } catch (error) {
+            console.error('Error calculating cart count:', error);
+        }
+    }
+
+    return totalCount;
+};
+
+
+
      
     const value = {
       products,
@@ -16,6 +58,9 @@ const ProductContextProvider = (props) => {
       setSearch, 
       showSearch,
       setShowSearch,
+      cartItems,
+      addToCart,
+      getCartCount,
     };
 
     return (

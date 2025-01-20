@@ -6,7 +6,7 @@ import ProductItem from "../components/ProductItem";
 const Home = () => {
     const {products, search, showSearch} = useContext(ProductContext);
     const [filterProducts, setFilterProducts] = useState([]);
-
+    
     const applyFilter = () => {
         let productsCopy = products.slice();
   
@@ -21,6 +21,7 @@ const Home = () => {
         setFilterProducts(products)
     },[products])
 
+    // Data fetch for search
     useEffect(()=>{
         applyFilter();
       },[search, showSearch])
@@ -30,9 +31,9 @@ const Home = () => {
             {/* Map Products  */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
                 {
-                    filterProducts.map((item, index)=>(
+                    filterProducts.map((item)=>(
                         <ProductItem 
-                        key={index}
+                        key={item.id}
                             item={item}
                         />
                     ))
