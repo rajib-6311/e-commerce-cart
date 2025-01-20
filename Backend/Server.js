@@ -1,22 +1,57 @@
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
-const app = express()
+import express from 'express';
+import mysql from 'mysql';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser';
+const salt = 10;
 
-app.use(express.json())
-app.use(cors())
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'e_commerce'
+    database: 'products' // Replace with your database name
+});
+
+app.post('/signup', (req, res)=>{
+    const sql = "INSERT INTO signup (`name`,`email`,`password`) VALUES(?)";
+    bcrypt.hash(req.body.password.toString(), salt, (err, hash)=>{
+        if(err) return res.json({Error: "Error for hashing"});
+        const values = [
+            req.body.name,
+            req.body.email,
+            hash
+        ]
+        db.query(sql, [values], (err, result)=>{
+            if(err) return res.json({Error: "Inserting data error in server"});
+            return res.json({Status: "Success"});
+        })
+    })
+
 })
 
-app.get('/', (req, res)=>{
-    return res.json('From Backend Side');
-})
+db.connect((err) => {
+    if (err) {
+        console.error('Database connection failed: ' + err.stack);
+        return;
+    }
+    console.log('Connected to the database.');
+});
 
-app.listen(8081, ()=>{
-    console.log("listening");
-})
+app.get('/', (req, res) => {
+    try {
+        return res.json('From Backend Side');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+});
+
+app.listen(8081, () => {
+    console.log("Server is running on port 8081");
+});
