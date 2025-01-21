@@ -1,7 +1,28 @@
-import { Link } from 'react-router-dom'
+import axios from 'axios';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
+
+    const [values, setValues] = useState({
+        email: '',
+        password: '',
+      });
+    
+      const navigate = useNavigate()
+      const handleSubmit = (e) => {
+        e.preventDefault();
+           axios.post('http://localhost:8081/login', values)
+          .then(res => {
+            if(res.data.Status === 'Success'){
+               navigate('/cart')
+            }else{
+                alert(res.data.Error);
+            }
+          })
+          .catch(err => console.error(err)); 
+      };
   return (
     <div className='flex justify-center items-center min-h-screen'>
       <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
@@ -11,7 +32,7 @@ const Login = () => {
             Sign in to access your account
           </p>
         </div>
-        <form
+        <form onSubmit={handleSubmit}
           noValidate=''
           action=''
           className='space-y-6 ng-untouched ng-pristine ng-valid'
@@ -22,6 +43,7 @@ const Login = () => {
                 Email address
               </label>
               <input
+                onChange={(e) => setValues({ ...values, email:e.target.value })}
                 type='email'
                 name='email'
                 id='email'
@@ -38,6 +60,7 @@ const Login = () => {
                 </label>
               </div>
               <input
+                onChange={(e) => setValues({ ...values, password:e.target.value })}
                 type='password'
                 name='password'
                 autoComplete='current-password'

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUp = () => {
@@ -9,12 +9,19 @@ const SignUp = () => {
     password: '',
   });
 
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post('http://localhost:8081/signup', values)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err)); // Fixed .then for error handling
+      .then((res) => {
+        if(res.data.Status === 'Success'){
+           navigate('/login')
+        }else{
+            alert("error");
+        }
+      })
+      .catch((err) => console.error(err)); 
   };
 
   return (

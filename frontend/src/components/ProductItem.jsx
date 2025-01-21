@@ -2,18 +2,18 @@ import { useContext } from "react";
 import PropTypes from 'prop-types';
 import { ProductContext } from "../context/ProductContext";
 
+
 const ProductItem = ({item}) => {
-    const { image,name, price} = item;
+    const { image,name, price} = item; 
 
     const {currency, addToCart} = useContext(ProductContext);
-    const defaultImage = "https://via.placeholder.com/150";
 
     return (
         <div className="text-gray-700 cursor-pointer">
             <div className="overflow-hidden">
                 <img
                     className="hover:scale-110 transition ease-in-out"
-                    src={image && image[0] ? image[0] : defaultImage}
+                    src={image}
                     alt={name}
                 />
             </div>

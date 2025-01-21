@@ -1,16 +1,24 @@
-import { createContext,useState } from "react";
+import { createContext,useEffect,useState } from "react";
 import PropTypes from 'prop-types';
-import {products} from '../assets/assets'
+
 
 
 export const ProductContext = createContext();
 
 const ProductContextProvider = (props) => {
+  const [carts, setCarts] = useState([]);
     const currency = '$';
 
     const [search , setSearch] = useState('');
     const [showSearch , setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({});
+
+    useEffect(() => {
+      fetch('http://localhost:8081/product')
+        .then((response) => response.json())
+        .then((data) => setCarts(data))
+        .catch((error) => console.error('Error fetching products:', error));
+    }, []);
 
     // add cart item function 
     const addToCart = async(itemId)=>{
@@ -63,7 +71,6 @@ const ProductContextProvider = (props) => {
 
 
     const value = {
-      products,
       currency,
       search,
       setSearch, 
@@ -73,6 +80,8 @@ const ProductContextProvider = (props) => {
       addToCart,
       getCartCount,
       updateQuantity,
+      carts,
+      setCarts,
     };
 
     return (
