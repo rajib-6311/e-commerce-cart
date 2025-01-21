@@ -6,6 +6,7 @@ import cross_icon from './cross_icon.png'
 
 
 export const assets = {
+    
     cart_icon,
     search_icon,
     bin_icon,
