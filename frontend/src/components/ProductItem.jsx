@@ -12,7 +12,7 @@ const ProductItem = ({item}) => {
         <div className="text-gray-700 cursor-pointer">
             <div className="overflow-hidden">
                 <img
-                    className="hover:scale-110 transition ease-in-out"
+                    className="hover:scale-110 transition ease-in-out h-52 w-80"
                     src={image}
                     alt={name}
                 />

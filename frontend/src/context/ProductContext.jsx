@@ -1,18 +1,17 @@
 import { createContext,useEffect,useState } from "react";
 import PropTypes from 'prop-types';
 
-
-
 export const ProductContext = createContext();
 
 const ProductContextProvider = (props) => {
   const [carts, setCarts] = useState([]);
     const currency = '$';
+    const delivery = 10;
 
     const [search , setSearch] = useState('');
     const [showSearch , setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({});
-
+  //  Fetch data from database
     useEffect(() => {
       fetch('http://localhost:8081/product')
         .then((response) => response.json())
@@ -54,12 +53,11 @@ const ProductContextProvider = (props) => {
     }
     return totalCount;
 };
-
+  //update cart items count 
     const updateQuantity = async (itemId, quantity) => {
-      // Clone the cartItems to avoid mutating state directly
       let cartData = structuredClone(cartItems);
   
-      // Update the quantity for the given itemId
+     
       if (quantity > 0) {
           cartData[itemId] = quantity; 
       } else {
@@ -67,8 +65,24 @@ const ProductContextProvider = (props) => {
       }
       setCartItems(cartData);
   };
-  
 
+  // total amount of cart items
+  const getCartAmount = () => {
+    let totalAmount = 0;
+
+    if (!cartItems || !carts) return totalAmount;
+
+    for (const itemId in cartItems) {
+        const itemQuantity = cartItems[itemId]; 
+        const itemInfo = carts.find((cart) => cart._id == itemId); 
+
+        if (itemInfo && itemQuantity > 0) {
+            totalAmount += itemInfo.price * itemQuantity; 
+        }
+    }
+
+    return totalAmount;
+};
 
     const value = {
       currency,
@@ -82,6 +96,8 @@ const ProductContextProvider = (props) => {
       updateQuantity,
       carts,
       setCarts,
+      getCartAmount,
+      delivery,
     };
 
     return (

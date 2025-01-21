@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import SearchBar from "./components/SearchBar";
 import Cart from "./pages/Cart";
 import SignUp from "./pages/SignUp";
+import HomePageData from "./pages/HomePageData";
 
 const App = () => {
   return (
@@ -12,8 +13,9 @@ const App = () => {
     <Navbar/>
     <SearchBar/>
       <Routes>
+      
       <Route path='/' element={<Home/>}/>
-      <Route path='/home' element={<Home/>}/>
+      <Route path='/home-data' element={<HomePageData/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/cart' element={<Cart/>}/>
       <Route path='/signup' element={<SignUp/>}/>

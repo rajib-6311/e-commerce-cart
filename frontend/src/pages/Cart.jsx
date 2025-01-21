@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import { assets } from "../assets/assets";
+import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
-    const { carts, cartItems, currency } = useContext(ProductContext);
+    const { carts, cartItems, currency,updateQuantity } = useContext(ProductContext);
     const [cartData, setCartData] = useState([]);
     useEffect(() => {
         const tempData = [];
@@ -31,23 +32,32 @@ const Cart = () => {
         {
             cartData?.map((item,index)=>{
                 const cartData = carts.find((cart)=> cart._id == item._id);
-                return(
+        return(
              <div key={index} 
-                    className="py-4 border-t border-b text-gray-700 grid grid-col-[4fr_0.5fr] items-center gap-4">
-                    <div className="flex items-center gap-6">
-                    <img className="w-16 " src={cartData.image} alt="" />
-                  <div>
-                    <p className="text-xl">{cartData.name}</p>
-                    <p>{currency}{cartData.price}</p>
-                  </div>
-                  <input className="border flex items-center max-w-10 sm:max-w-20 px-1 py-1" type="number" min={1} defaultValue={item.quantity} />
-                  <img className="cursor-pointer w-4" src={assets.bin_icon} alt="" />
+                    className="py-4 border-t border-b text-gray-700 grid grid-col-[4fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4">
+                        <div className="flex items-start gap-8">
+                           <img className="w-16 " src={cartData.image} alt="" />
+                             <div>
+                                <p className="text-xs sm:text-lg font-medium">{cartData.name}</p>
+                                <div className="flex items-center gap-5 mt-2">
+                                   <p>{currency}{cartData.price}</p>
+                                   
+                                </div>
+                             </div>
+                 </div>
+                 <input onChange={(e)=>e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, Number(e.target.value))} className="border flex items-center max-w-10 sm:max-w-20 px-1 py-1" type="number" min={1} defaultValue={item.quantity} />
+                 <img onClick={()=>updateQuantity(item._id, 0)} className="cursor-pointer w-4 items-end" src={assets.bin_icon} alt="" />
              </div>
-         </div>
                 )
                 
             })
         }
+        <div className="flex justify-end my-20">
+        <div className="w-full sm:w-[450px]">
+           <CartTotal/>
+        </div>
+
+        </div>
        </div>
     );
 };
